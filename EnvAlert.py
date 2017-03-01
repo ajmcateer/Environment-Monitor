@@ -11,7 +11,8 @@ def https_check(website):
     try:
         result = requests.get(website, verify=False)
     except:
-        return "404"
+        print(website)
+        return "na"
     return result.status_code
 
 def get_text_path():
@@ -29,7 +30,7 @@ def load_websites():
 WEBSITES = load_websites()
 for site in WEBSITES:
     status_code = https_check(site)
-    if str(status_code) != "200":
+    if str(status_code) == "na":
         send_alert("fail")
 
 print("Done")
