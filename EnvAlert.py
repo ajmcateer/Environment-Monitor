@@ -2,9 +2,22 @@
 import os
 import requests
 
-def send_alert(alert):
+def send_alert(title, message):
     """Send notification"""
-    print(alert)
+
+    messagestr = '-:-'.join(message)
+
+    url = "https://api.pushbullet.com/v2/pushes"
+    payload = "{\"body\":\""+ messagestr + "\",\"title\":\""+ title +"\",\"type\":\"note\"}\r\n"
+    headers = {
+        'access-token': "o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg",
+        'content-type': "application/json",
+        'cache-control': "no-cache",
+        'postman-token': "30fcf100-2b7b-8707-1de7-6014da51140b"
+        }
+    response = requests.request("POST", url, data=payload, headers=headers)
+
+    print(response.text)
 
 def https_check(website):
     """Checks http resources"""
@@ -27,10 +40,13 @@ def load_websites():
         content = file_contents.read().splitlines()
     return content
 
+FAILED = []
 WEBSITES = load_websites()
 for site in WEBSITES:
     status_code = https_check(site)
     if str(status_code) == "na":
-        send_alert("fail")
+        FAILED.append(site)
+
+send_alert(title="Warning Server Offline", message=FAILED)
 
 print("Done")
