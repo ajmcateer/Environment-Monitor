@@ -1,23 +1,14 @@
 """Checks the enviroment and sends an email to affected user"""
 import os
 import requests
+import simplepushbullet
 
 def send_alert(title, message):
+    """Sends notification to pushbullet"""
+    response = simplepushbullet.send_list(title, message, "o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg")
     """Send notification"""
 
-    messagestr = '-:-'.join(message)
-
-    url = "https://api.pushbullet.com/v2/pushes"
-    payload = "{\"body\":\""+ messagestr + "\",\"title\":\""+ title +"\",\"type\":\"note\"}\r\n"
-    headers = {
-        'access-token': "o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg",
-        'content-type': "application/json",
-        'cache-control': "no-cache",
-        'postman-token': "30fcf100-2b7b-8707-1de7-6014da51140b"
-        }
-    response = requests.request("POST", url, data=payload, headers=headers)
-
-    print(response.text)
+    print(response)
 
 def https_check(website):
     """Checks http resources"""
